@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const session = require('express-session');
 const app = express();
 
 app.set('port', (process.env.PORT || 3030));
@@ -9,5 +10,14 @@ app.set('views', path.join(__dirname, 'views'));
 app.listen(app.get('port'), () => {
   console.log('Server started on port http://localhost:' + app.get('port'));
 });
+
+app.use(express.urlencoded({ extended: true }));
+app.use(session({
+  secret: 'Shopping Cart',
+  resave: false,
+  saveUninitialized: true,
+}))
+
+app.use(require('./middlewares/cart'));
 
 app.use(require('./routes/main'));
